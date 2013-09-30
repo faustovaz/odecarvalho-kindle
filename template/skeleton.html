@@ -14,23 +14,26 @@
 	</style>
 </head>
 <body>
+	
+	<section>
+		<p align="center">
+			<img src="odecarvalho.png" style="vertical-align: center"/>
+		</p>
+		<p align="center" style="color: #990000; font-size: 20px">
+			Artigos
+		</p>
+		<div align="center">
+			<i><em>www.olavodecarvalho.org</em></i>
+		</div>
+	</section>
+
 	<section>
 		<ul>
 			{% for article in articles %}
-				<li>{{ article['name'] }}</li>
+				<li><a href="#1">{{ article['title'] }}</a></li>
 			{% endfor %}
 		</ul>
 	</section>
 
-
-	<section>
-		<ul>
-			{% for article in articles %}
-				<li>{{ article['name'] }}</li>
-			{% endfor %}
-		</ul>
-	</section>
-
-
-</body>
+</body>		
 </html>
