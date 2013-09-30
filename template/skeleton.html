@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+	<title>&nbsp;</title>
+	<style>
+		body{
+			margin: 0px;
+		}
+
+		section{
+			page-break-before: always;
+		}
+
+	</style>
+</head>
+<body>
+	<section>
+		<ul>
+			{% for article in articles %}
+				<li>{{ article['name'] }}</li>
+			{% endfor %}
+		</ul>
+	</section>
+
+
+	<section>
+		<ul>
+			{% for article in articles %}
+				<li>{{ article['name'] }}</li>
+			{% endfor %}
+		</ul>
+	</section>
+
+
+</body>
+</html>
