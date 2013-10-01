@@ -5,9 +5,7 @@ Para gerar o script, basta instalar as dependencias (requirements.txt) e depois 
 gerado dentro da pasta template com o nome pre-kindle-output.html) basta executar o kindlegen (que pode ser baixado gratuitamente
 no site da amazon) passando como paramentro o arquivo html gerado pelo script.
 
-[code]
 >>> kindlegen pre-kindle-output.html
-[/code]
 
 O kindlegen irá gera um arquivo mobi com o mesmo nome do arquivo html gerado.
 O arquivo odecarvalho-artigos.mobi contém todos os artigos disponibilizados no site do filósofo até o momento.
