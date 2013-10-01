@@ -3,6 +3,7 @@ import urllib
 import os
 from bs4 import BeautifulSoup
 from jinja2 import Environment, FileSystemLoader
+import re
 
 
 def htmlScape(text):
@@ -36,10 +37,23 @@ def htmlScape(text):
 		'À'	:	'&Agrave;',
 		'à'	:	'&agrave;',
 		'—'	:	'&#8212;',
+		'&ndash;' : '&#8212;'
 	}
 
 	for key, value in dictionary.iteritems():
 		text = text.replace(key, value)
+	return text
+
+def eliminateHTMLBadTags(text):
+	soup = BeautifulSoup(text)
+	divs = soup.find_all('divs')
+	regex = re.compile(r'^[\s\n]*$')
+	for div in divs:
+		divText = div.get_gext()
+		if not divText or regex.match(divText):
+			div.replace_with("")
+	text = soup.prettify()
+	text = re.sub(r'(.?)(&nbsp;)+(.?)', r'\1&nbsp;\3',text)
 	return text
 
 
@@ -84,6 +98,7 @@ class ArticleScrapper:
 				article_data = html_date.text.split("\n")
 				newspaper = htmlScape(article_data[0].encode('utf-8'))
 				date = htmlScape(article_data[1].encode('utf-8'))
+				html_article = eliminateHTMLBadTags(html_article.encode('utf-8'))
 				html_article = htmlScape(html_article.encode('utf-8'))
 				self.fullArticles.append({	'title' : unicode(title, 'utf-8'), 
 											'date' : unicode(date, 'utf-8'), 
