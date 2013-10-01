@@ -1,4 +1,5 @@
-Artigos do Olavo de Carvalho no Kindle!
+**Artigos do Olavo de Carvalho no Kindle!**
+=======================================
 
 Pequeno script que gera um arquivo HTML com todos os artigos disponibilizados no site do filósofo e jornalista Olavo de Carvalho.
 Para gerar o script, basta instalar as dependencias (requirements.txt) e depois com o arquivo html gerado (por padrão o arquivo é
@@ -11,7 +12,8 @@ O kindlegen irá gera um arquivo mobi com o mesmo nome do arquivo html gerado.
 O arquivo odecarvalho-artigos.mobi contém todos os artigos disponibilizados no site do filósofo até o momento.
 
 
-TODOS
+**TODOS:**
+------
 
 - Gerar uma estrutura html melhor com Capa, Sumário (table of contents) e links para o sumário em cada artigo;
 - Gerar uma esttrutura html sem tags redundantes ou vazias;
