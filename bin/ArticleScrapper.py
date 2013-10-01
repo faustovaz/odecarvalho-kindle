@@ -1,5 +1,43 @@
+#-*- coding: utf-8 -*-
 import urllib
 from bs4 import BeautifulSoup
+from jinja2 import Environment, FileSystemLoader
+
+
+def htmlScape(text):
+	dictionary = {
+		'á' : 	'&aacute',
+		'é' :	'&eacute',
+		'í' :	'&iacute',
+		'ó' :	'&oacute',
+		'ú' :	'&uacute',
+		'Á'	:	'&Aacute',
+		'É'	:	'&Eacute',
+		'Í'	:	'&Iacute',
+		'Ó'	:	'&Oacute',
+		'Ú'	:	'&Uacute',
+		'â'	:	'&acirc',
+		'ê'	:	'&ecirc',
+		'î'	:	'&icirc',
+		'ô'	:	'&ocirc',
+		'û'	:	'&ucirc',
+		'Â'	:	'&Acirc',
+		'Ê'	:	'&Ecirc',
+		'Î'	:	'&Icirc',
+		'Ô'	:	'&Ocirc',
+		'Û'	:	'&Ucirc',
+		'ã'	:	'&atilde',
+		'õ'	:	'&otilde',
+		'Ã'	:	'&Atilde',
+		'Õ'	:	'&Otilde',
+		'Ç'	:	'&Ccedil',
+		'ç'	:	'&ccedil'
+
+	}
+	for key, value in dictionary.iteritems():
+		text = text.replace(key, value)
+	return text
+
 
 class ArticleScrapper:
 	
@@ -23,7 +61,7 @@ class ArticleScrapper:
 			articles.append({'name' : articleName.encode('utf-8'), 'link' : link['href']})
 		return articles
 
-	def getFullArticlesData(self):
+	def loadFullArticlesData(self):
 		articles = self.getAllArticlesListed()
 		for article in articles:
 			beautifulSoup = self.getScrapper(self.address + article['link'])
@@ -41,17 +79,21 @@ class ArticleScrapper:
 				title = html_title.text.split("\n")
 				article_data = html_date.text.split("\n")
 			
-				title = title[0]
-				newspaper = article_data[0]
-				date = article_data[1]
+				print title[0]
+				title = htmlScape(title[0].encode('utf-8'))
+				newspaper = htmlScape(article_data[0].encode('utf-8'))
+				date = htmlScape(article_data[1].encode('utf-8'))
 
-				self.fullArticles.append({	'title' : unicode(title), 
-											'date' : unicode(date), 
-											'newspaper' : unicode(newspaper), 
-											'text' : unicode(html_article)
+				self.fullArticles.append({	'title' : unicode(title, 'utf-8'), 
+											'date' : unicode(date, 'utf-8'), 
+											'newspaper' : unicode(newspaper, 'utf-8'), 
+											'text' : html_article
 										})
 
-
+	def generateArticlesFile(self):
+		self.loadFullArticlesData()
+		templateEngine = TemplateEngine()
+		templateEngine.generateHTMLFile(self.fullArticles)
 
 
 	def printAllData(self):
@@ -63,7 +105,21 @@ class ArticleScrapper:
 			print '\n\n'
 
 
+class TemplateEngine:
+
+	def generateHTMLFile(self, data):
+		template = self.getTemplate()
+		ouput = template.render(articles=data)
+		with open("../template/pre-kindle-ouput.html", "w") as htmlFile:
+			htmlFile.write(ouput.encode('utf-8'))
+
+	def getTemplate(self):
+		environment = Environment(loader=FileSystemLoader("../template"))
+		return environment.get_template("skeleton.html")
+
+
+
 if __name__ == '__main__':
 	a = ArticleScrapper()
-	a.printAllData()
+	a.generateArticlesFile()
 
