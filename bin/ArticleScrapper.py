@@ -1,4 +1,6 @@
+#! /usr/bin/env python
 #-*- coding: utf-8 -*-
+
 import urllib
 import os
 from bs4 import BeautifulSoup
@@ -81,7 +83,6 @@ class ArticleScrapper:
 
 	def loadFullArticlesData(self):
 		articles = self.getAllArticlesListed()
-		articles = articles[0:11]
 		for article in articles:
 			beautifulSoup = self.getScrapper(self.address + article['link'])
 			table = beautifulSoup.find('table')
