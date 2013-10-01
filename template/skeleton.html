@@ -11,6 +11,10 @@
 			page-break-before: always;
 		}
 
+		ul{
+			list-style-type: decimal;
+		}
+
 	</style>
 </head>
 <body>
@@ -28,12 +32,22 @@
 	</section>
 
 	<section>
+		<p>Lista de artigos</p>
 		<ul>
+			{% set number = 0 %}
 			{% for article in articles %}
-				<li><a href="#1">{{ article['title'] }}</a></li>
+				<li><a href="#{{ number + loop.index }}">{{Number}} - {{ article['title'] }}</a></li>
 			{% endfor %}
 		</ul>
 	</section>
+
+	{% set number = 0 %}
+	{% for article in articles %}
+	<section>
+		<p><a id="{{ number + loop.index }}">{{ number + loop.index }} - {{ article['title'] }}</a></p>
+			{{ article['text'] }}
+	</section>
+	{% endfor %}
 
 </body>		
 </html>

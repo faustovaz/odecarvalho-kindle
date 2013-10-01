@@ -1,39 +1,43 @@
 #-*- coding: utf-8 -*-
 import urllib
+import os
 from bs4 import BeautifulSoup
 from jinja2 import Environment, FileSystemLoader
 
 
 def htmlScape(text):
 	dictionary = {
-		'á' : 	'&aacute',
-		'é' :	'&eacute',
-		'í' :	'&iacute',
-		'ó' :	'&oacute',
-		'ú' :	'&uacute',
-		'Á'	:	'&Aacute',
-		'É'	:	'&Eacute',
-		'Í'	:	'&Iacute',
-		'Ó'	:	'&Oacute',
-		'Ú'	:	'&Uacute',
-		'â'	:	'&acirc',
-		'ê'	:	'&ecirc',
-		'î'	:	'&icirc',
-		'ô'	:	'&ocirc',
-		'û'	:	'&ucirc',
-		'Â'	:	'&Acirc',
-		'Ê'	:	'&Ecirc',
-		'Î'	:	'&Icirc',
-		'Ô'	:	'&Ocirc',
-		'Û'	:	'&Ucirc',
-		'ã'	:	'&atilde',
-		'õ'	:	'&otilde',
-		'Ã'	:	'&Atilde',
-		'Õ'	:	'&Otilde',
-		'Ç'	:	'&Ccedil',
-		'ç'	:	'&ccedil'
-
+		'á' : 	'&aacute;',
+		'é' :	'&eacute;',
+		'í' :	'&iacute;',
+		'ó' :	'&oacute;',
+		'ú' :	'&uacute;',
+		'Á'	:	'&Aacute;',
+		'É'	:	'&Eacute;',
+		'Í'	:	'&Iacute;',
+		'Ó'	:	'&Oacute;',
+		'Ú'	:	'&Uacute;',
+		'â'	:	'&acirc;',
+		'ê'	:	'&ecirc;',
+		'î'	:	'&icirc;',
+		'ô'	:	'&ocirc;',
+		'û'	:	'&ucirc;',
+		'Â'	:	'&Acirc;',
+		'Ê'	:	'&Ecirc;',
+		'Î'	:	'&Icirc;',
+		'Ô'	:	'&Ocirc;',
+		'Û'	:	'&Ucirc;',
+		'ã'	:	'&atilde;',
+		'õ'	:	'&otilde;',
+		'Ã'	:	'&Atilde;',
+		'Õ'	:	'&Otilde;',
+		'Ç'	:	'&Ccedil;',
+		'ç'	:	'&ccedil;',
+		'À'	:	'&Agrave;',
+		'à'	:	'&agrave;',
+		'—'	:	'&#8212;',
 	}
+
 	for key, value in dictionary.iteritems():
 		text = text.replace(key, value)
 	return text
@@ -58,11 +62,12 @@ class ArticleScrapper:
 		for link in allLinks:
 			words = link.text.splitlines()
 			articleName = " ".join(words)
-			articles.append({'name' : articleName.encode('utf-8'), 'link' : link['href']})
+			articles.append({'title' : articleName.encode('utf-8'), 'link' : link['href']})
 		return articles
 
 	def loadFullArticlesData(self):
 		articles = self.getAllArticlesListed()
+		articles = articles[0:11]
 		for article in articles:
 			beautifulSoup = self.getScrapper(self.address + article['link'])
 			table = beautifulSoup.find('table')
@@ -70,24 +75,20 @@ class ArticleScrapper:
 			td = table_tds[1]
 			paragraphs = td.find_all('p')
 			divs = td.find_all('div')
-
 			if len(divs) > 0:
-				html_title = paragraphs[1]
 				html_date = paragraphs[2]
 				html_article = divs[0]
-			
-				title = html_title.text.split("\n")
+				title = unicode(article['title'], 'utf-8')
+				title = htmlScape(title.encode('utf-8'))
+				print title
 				article_data = html_date.text.split("\n")
-			
-				print title[0]
-				title = htmlScape(title[0].encode('utf-8'))
 				newspaper = htmlScape(article_data[0].encode('utf-8'))
 				date = htmlScape(article_data[1].encode('utf-8'))
-
+				html_article = htmlScape(html_article.encode('utf-8'))
 				self.fullArticles.append({	'title' : unicode(title, 'utf-8'), 
 											'date' : unicode(date, 'utf-8'), 
 											'newspaper' : unicode(newspaper, 'utf-8'), 
-											'text' : html_article
+											'text' : unicode(html_article, 'utf-8')
 										})
 
 	def generateArticlesFile(self):
@@ -96,26 +97,24 @@ class ArticleScrapper:
 		templateEngine.generateHTMLFile(self.fullArticles)
 
 
-	def printAllData(self):
-		self.getFullArticlesData()
-		for article in self.fullArticles:
-			print article['title']
-			print article['date']
-			print article['newspaper']
-			print '\n\n'
-
-
 class TemplateEngine:
 
 	def generateHTMLFile(self, data):
 		template = self.getTemplate()
 		ouput = template.render(articles=data)
-		with open("../template/pre-kindle-ouput.html", "w") as htmlFile:
+		with open(self.getPath() + "/template/pre-kindle-output.html", "w") as htmlFile:
 			htmlFile.write(ouput.encode('utf-8'))
 
 	def getTemplate(self):
-		environment = Environment(loader=FileSystemLoader("../template"))
+		environment = Environment(loader=FileSystemLoader(self.getPath() + "/template"))
 		return environment.get_template("skeleton.html")
+
+	def getPath(self):
+		scriptDirPath = os.path.dirname(os.path.realpath(__file__))
+		dirPathSplitted = scriptDirPath.split("/")
+		dirPathSplitted.pop()
+		return "/".join(dirPathSplitted)
+
 
 
 
