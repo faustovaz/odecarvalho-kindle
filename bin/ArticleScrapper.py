@@ -87,25 +87,30 @@ class ArticleScrapper:
 			beautifulSoup = self.getScrapper(self.address + article['link'])
 			table = beautifulSoup.find('table')
 			table_tds = table.find_all('td')
-			td = table_tds[1]
-			paragraphs = td.find_all('p')
-			divs = td.find_all('div')
-			if len(divs) > 0:
-				html_date = paragraphs[2]
-				html_article = divs[0]
-				title = unicode(article['title'], 'utf-8')
-				title = htmlScape(title.encode('utf-8'))
-				print title
-				article_data = html_date.text.split("\n")
-				newspaper = htmlScape(article_data[0].encode('utf-8'))
-				date = htmlScape(article_data[1].encode('utf-8'))
-				html_article = eliminateHTMLBadTags(html_article.encode('utf-8'))
-				html_article = htmlScape(html_article.encode('utf-8'))
-				self.fullArticles.append({	'title' : unicode(title, 'utf-8'), 
-											'date' : unicode(date, 'utf-8'), 
-											'newspaper' : unicode(newspaper, 'utf-8'), 
-											'text' : unicode(html_article, 'utf-8')
-										})
+			try:
+				td = table_tds[1]
+				paragraphs = td.find_all('p')
+				divs = td.find_all('div')
+				if len(divs) > 0:
+					html_date = paragraphs[2]
+					html_article = divs[0]
+					title = unicode(article['title'], 'utf-8')
+					title = htmlScape(title.encode('utf-8'))
+					print title
+					article_data = html_date.text.split("\n")
+					newspaper = htmlScape(article_data[0].encode('utf-8'))
+					date = htmlScape(article_data[1].encode('utf-8'))
+					html_article = eliminateHTMLBadTags(html_article.encode('utf-8'))
+					html_article = htmlScape(html_article.encode('utf-8'))
+					self.fullArticles.append({	'title' : unicode(title, 'utf-8'), 
+												'date' : unicode(date, 'utf-8'), 
+												'newspaper' : unicode(newspaper, 'utf-8'), 
+												'text' : unicode(html_article, 'utf-8')
+											})
+					if (title == "Excesso de democracia"):
+						break
+			except Exception:
+				print "Fail to get article: ", article['title']
 
 	def generateArticlesFile(self):
 		self.loadFullArticlesData()
