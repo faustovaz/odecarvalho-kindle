@@ -107,6 +107,9 @@ class ArticleScrapper:
 												'newspaper' : unicode(newspaper, 'utf-8'), 
 												'text' : unicode(html_article, 'utf-8')
 											})
+					#Due to some strange changes in some html file of some articles,
+					#I hardcoded this to get only the articles written by Olavo and available
+					#in the "What's new section".
 					if (title == "Excesso de democracia"):
 						break
 			except Exception:
