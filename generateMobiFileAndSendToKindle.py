@@ -8,10 +8,10 @@ from email.mime.application import MIMEApplication
 from email.MIMEMultipart import MIMEMultipart
 
 config = {
-	"email"				: "sender@email.com",
-	"email-password"	: "passwd",
-	"email-to"			: "email@kindle.com",
-	"subject"			: "Olavo de Carvalho - Mobi File"
+	"email" : "sender@email.com",
+	"email-password" : "passwd",
+	"email-to" : "email@kindle.com",
+	"subject" : "Olavo de Carvalho - Mobi File"
 }
 
 def clean():
