@@ -8,10 +8,10 @@ from email.mime.application import MIMEApplication
 from email.MIMEMultipart import MIMEMultipart
 
 config = {
-	"email"			: "from@email.com",
-	"email-password": "password",
-	"email-to"		: "email@kindle.com",
-	"subject"		: "Olavo de Carvalho - Mobi File"
+	"email"				: "sender@email.com",
+	"email-password"	: "passwd",
+	"email-to"			: "email@kindle.com",
+	"subject"			: "Olavo de Carvalho - Mobi File"
 }
 
 def clean():
@@ -36,9 +36,9 @@ def executeScriptToGenerateFile():
 
 def sendFileToKindleEmail():
 	message = MIMEMultipart()
-	message['From'] 	= config['email']
-	message['To'] 		= config['email-to']
-	message['Subject'] 	= config['subject']
+	message['From'] = config['email']
+	message['To'] = config['email-to']
+	message['Subject'] = config['subject']
 	with open('odecarvalho-artigos.mobi', 'rb') as attach:
 		mimeApplication = MIMEApplication(attach.read())
 	mimeApplication.add_header('Content-Disposition', 'attachment', filename='odecarvalho-artigos.mobi')
