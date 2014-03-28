@@ -70,16 +70,30 @@ class ArticleScrapper:
 		return BeautifulSoup(url)
 
 	def getAllArticlesListed(self):
+		""" Get all the articles listed in the section 'Novidades (What's new)' at the Olavo's site """
 		articles = []
 		beautifulSoup = self.getScrapper(self.address + "index.html")
 		tables = beautifulSoup.find_all('table')
-		articleTable = tables[7]
+		articleTable = tables[5] #Just the table with articles
 		allLinks = articleTable.find_all('a', {'class' : 'menulink'})
 		for link in allLinks:
 			words = link.text.splitlines()
 			articleName = " ".join(words)
 			articles.append({'title' : articleName.encode('utf-8'), 'link' : link['href']})
+		articles = self.filterArticles(articles)
 		return articles
+
+	def filterArticles(self, listOfArticles):
+		""" 
+			Filter the list of articles scrapped. Here we are deleting all links that don't belong the "What's new" section.
+			This happens due to the structure of the Olavo's site.
+		"""
+		lastArticleTitle="Excesso de democracia"
+		filteredArticles = []
+		for index, article in enumerate(listOfArticles):
+			if article['title'] == lastArticleTitle:
+				break
+		return listOfArticles[:index+1]
 
 	def loadFullArticlesData(self):
 		articles = self.getAllArticlesListed()
@@ -144,5 +158,8 @@ class TemplateEngine:
 
 if __name__ == '__main__':
 	a = ArticleScrapper()
-	a.generateArticlesFile()
+	lista = a.getAllArticlesListed()
+	for item in lista:
+		print item['title']
+
 
