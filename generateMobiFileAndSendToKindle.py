@@ -55,6 +55,7 @@ if __name__ == '__main__':
 	clean()
 	if isKindleGenInstalled():
 		executeScriptToGenerateFile()
-		sendFileToKindleEmail()
+		if os.path.isfile("odecarvalho-artigos.mobi"):
+			sendFileToKindleEmail()
 	else:
 		print "In order to genereate the mobi file first install kindlegen from Amazon"
