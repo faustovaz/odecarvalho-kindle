@@ -2,3 +2,4 @@ odecarvalho-kindle.sublime-project
 odecarvalho-kindle.sublime-workspace
 tests/
 template/pre-kindle-output.html
+env/
