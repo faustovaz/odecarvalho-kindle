@@ -98,35 +98,29 @@ class ArticleScrapper:
 	def loadFullArticlesData(self):
 		articles = self.getAllArticlesListed()
 		for article in articles:
-			beautifulSoup = self.getScrapper(self.address + article['link'])
-			table = beautifulSoup.find('table')
-			table_tds = table.find_all('td')
 			try:
+				beautifulSoup = self.getScrapper(self.address + article['link'])
+				table = beautifulSoup.find('table')
+				table_tds = table.find_all('td')
 				td = table_tds[1]
 				paragraphs = td.find_all('p')
 				divs = td.find_all('div')
-				if len(divs) > 0:
-					html_date = paragraphs[2]
-					html_article = divs[0]
-					title = unicode(article['title'], 'utf-8')
-					title = htmlScape(title.encode('utf-8'))
-					print title
-					article_data = html_date.text.split("\n")
-					newspaper = htmlScape(article_data[0].encode('utf-8'))
-					date = htmlScape(article_data[1].encode('utf-8'))
-					html_article = eliminateHTMLBadTags(html_article.encode('utf-8'))
-					html_article = htmlScape(html_article.encode('utf-8'))
-					self.fullArticles.append({	'title' : unicode(title, 'utf-8'), 
-												'date' : unicode(date, 'utf-8'), 
-												'newspaper' : unicode(newspaper, 'utf-8'), 
-												'text' : unicode(html_article, 'utf-8')
-											})
-					#Due to some strange changes in some html file of some articles,
-					#I hardcoded this to get only the articles written by Olavo and available
-					#in the "What's new section".
-					if (title == "Excesso de democracia"):
-						break
-			except Exception:
+				html_date = paragraphs[2]
+				html_article = divs[0]
+				title = unicode(article['title'], 'utf-8')
+				title = htmlScape(title.encode('utf-8'))
+				article_data = html_date.text.split("\n")
+				newspaper = htmlScape(article_data[0].encode('utf-8'))
+				date = htmlScape(article_data[1].encode('utf-8'))
+				html_article = eliminateHTMLBadTags(html_article.encode('utf-8'))
+				html_article = htmlScape(html_article.encode('utf-8'))
+				self.fullArticles.append({	'title' : unicode(title, 'utf-8'), 
+											'date' : unicode(date, 'utf-8'), 
+											'newspaper' : unicode(newspaper, 'utf-8'), 
+											'text' : unicode(html_article, 'utf-8')
+										})
+				print title
+			except (Exception, AttributeError):
 				print "Fail to get article: ", article['title']
 
 	def generateArticlesFile(self):
@@ -158,8 +152,6 @@ class TemplateEngine:
 
 if __name__ == '__main__':
 	a = ArticleScrapper()
-	lista = a.getAllArticlesListed()
-	for item in lista:
-		print item['title']
+	a.generateArticlesFile()
 
 
