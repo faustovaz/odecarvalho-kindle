@@ -148,8 +148,6 @@ class TemplateEngine:
 		return "/".join(dirPathSplitted)
 
 
-
-
 if __name__ == '__main__':
 	a = ArticleScrapper()
 	a.generateArticlesFile()
