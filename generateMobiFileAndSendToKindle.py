@@ -29,7 +29,7 @@ def executeScriptToGenerateFile():
 	if not command:
 		if os.path.isfile("template/pre-kindle-output.html"):
 			command = subprocess.call(['kindlegen template/pre-kindle-output.html -o odecarvalho-artigos.mobi'], shell=True)
-			if not command:
+			if os.path.isfile("template/odecarvalho-artigos.mobi"):
 				command = subprocess.call(['mv template/odecarvalho-artigos.mobi odecarvalho-artigos.mobi'], shell=True)
 		else:
 			print "Some error occurred while trying to generate mobi file."
