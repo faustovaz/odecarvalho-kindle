@@ -8,13 +8,5 @@ no site da amazon) passando como paramentro o arquivo html gerado pelo script.
 >>> kindlegen pre-kindle-output.html
 
 O kindlegen irá gera um arquivo mobi com o mesmo nome do arquivo html gerado.
-O arquivo odecarvalho-artigos.mobi contém todos os artigos disponibilizados no site do filósofo até o momento.
-
-
-**TODOS:**
-
-- Gerar uma estrutura html melhor com Capa, Sumário (table of contents) e links para o sumário em cada artigo;
-- Gerar uma esttrutura html sem tags redundantes ou vazias;
-- Formatar artigos, incluindo o nome do jornal ao qual o artigo foi publicado e a data;
-- Ler todos os artigos e aprender com o Olavo;
-- Tornar-se um Olavette :D
+O arquivo odecarvalho-artigos.mobi contém artigos disponibilizados no site do
+filósofo até o momento.
